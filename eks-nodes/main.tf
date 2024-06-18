@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "example-AmazonEC2ContainerRegistryRea
 }
 
 resource "aws_eks_node_group" "example" {
-  cluster_name    = "${var.eks-name}"
+  cluster_name    = var.eks-name
   node_group_name = "${var.eks-name}-${var.nodeName}"
   node_role_arn   = aws_iam_role.example.arn
   subnet_ids      = [var.subnet_ids["us-east-1a"], var.subnet_ids["us-east-1b"]]
