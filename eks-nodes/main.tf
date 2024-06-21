@@ -38,21 +38,26 @@ resource "aws_eks_node_group" "example" {
   capacity_type  = "ON_DEMAND"
   instance_types = ["t2.medium"]
   scaling_config {
-    desired_size = 1
-    max_size     = 2
-    min_size     = 0
+    desired_size = 2
+    max_size     = 5
+    min_size     = 1
   }
 
   update_config {
     max_unavailable = 1
   }
 
+  tags = {
+    "Name"                             = "nodes-${var.eks-name}"
+    "kubernetes.io/cluster/my-cluster" = "owned"
+  }
 
   depends_on = [
     aws_iam_role_policy_attachment.example-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.example-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
   ]
+
 
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
