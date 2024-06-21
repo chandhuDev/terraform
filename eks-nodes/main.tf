@@ -35,6 +35,8 @@ resource "aws_eks_node_group" "example" {
   subnet_ids      = [var.subnet_ids["us-east-1a"], var.subnet_ids["us-east-1b"]]
   version         = var.eks-version
 
+  capacity_type  = "ON_DEMAND"
+  instance_types = ["t2.medium"]
   scaling_config {
     desired_size = 1
     max_size     = 2
@@ -51,4 +53,8 @@ resource "aws_eks_node_group" "example" {
     aws_iam_role_policy_attachment.example-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
   ]
+
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
 }

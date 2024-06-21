@@ -11,4 +11,4 @@
 # Terraform configuration files
 .terraform/
 .terraform.lock.hcl
-
+.terraform.tfvars
