@@ -43,3 +43,6 @@ variable "region" {
 variable "ec2-subnet" {
   type = string
 }
+variable "instance_image" {
+  type = string
+}

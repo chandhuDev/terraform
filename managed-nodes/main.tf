@@ -1,5 +1,5 @@
 resource "aws_iam_role" "example" {
-  name = "eks-node-role"
+  name = "eks-managed-node-role"
 
   assume_role_policy = jsonencode({
     Statement = [{

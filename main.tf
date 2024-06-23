@@ -61,8 +61,8 @@ module "ec2" {
   az                = var.public_azs
   vpc-id            = module.vpc.vpc_id
   aws_key_pair_name = "${module.vpc.vpc_id}-key-pair"
-  public_subnet_ids = module.subnets.subnet_ids_pb[var.ec2-subnet]
-  sg = module.sg.sg-id
+  public_subnet_ids = module.subnets.subnet_ids_pb["${var.public_azs}"]
+  sg                = module.sg.sg-id
 }
 
 module "eks" {
@@ -71,8 +71,8 @@ module "eks" {
   private_subnet_ids = module.subnets.subnet_ids_pr
 }
 
-module "eks-nodes" {
-  source      = "./eks-nodes"
+module "managed-nodes" {
+  source      = "./managed-nodes"
   nodeName    = "${module.eks.eks-name}-${var.eks-node-name}"
   eks-name    = module.eks.eks-name
   subnet_ids  = module.subnets.subnet_ids_pr
@@ -80,4 +80,12 @@ module "eks-nodes" {
   eks-version = module.eks.eks-version
 }
 
+module "self-managed-nodes" {
+  source                 = "./self-managed-nodes"
+  smn-instance-type      = var.intance_type
+  smn-node-image         = var.instance_image
+  subnet_ids             = module.subnets.subnet_ids_pr
+  eks-cluster-name       = module.eks.eks-name
+  eks-smn-security-group = module.sg.eks-sfn-sg
+}
 
