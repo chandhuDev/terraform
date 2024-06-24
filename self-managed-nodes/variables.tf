@@ -1,4 +1,4 @@
-variable "eks-cluster-name" {
+variable "eks_cluster_name" {
   type = string
 }
 
@@ -13,4 +13,7 @@ variable "eks-smn-security-group" {
 }
 variable "subnet_ids" {
   type = map(string)
+}
+variable "nodeName" {
+  type = string
 }

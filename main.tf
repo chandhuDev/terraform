@@ -60,8 +60,8 @@ module "ec2" {
   instance_type     = var.intance_type
   az                = var.public_azs
   vpc-id            = module.vpc.vpc_id
-  aws_key_pair_name = "${module.vpc.vpc_id}-key-pair"
-  public_subnet_ids = module.subnets.subnet_ids_pb["${var.public_azs}"]
+  aws_key_pair_name = "ec2-jenkins-kp"
+  public_subnet_ids = module.subnets.subnet_ids_pb
   sg                = module.sg.sg-id
 }
 
@@ -73,7 +73,7 @@ module "eks" {
 
 module "managed-nodes" {
   source      = "./managed-nodes"
-  nodeName    = "${module.eks.eks-name}-${var.eks-node-name}"
+  nodeName    = "${var.eks-node-name}"
   eks-name    = module.eks.eks-name
   subnet_ids  = module.subnets.subnet_ids_pr
   region      = var.region
@@ -84,8 +84,9 @@ module "self-managed-nodes" {
   source                 = "./self-managed-nodes"
   smn-instance-type      = var.intance_type
   smn-node-image         = var.instance_image
+  nodeName    = var.eks-sf-node-name
   subnet_ids             = module.subnets.subnet_ids_pr
-  eks-cluster-name       = module.eks.eks-name
+  eks_cluster_name       = module.eks.eks-name
   eks-smn-security-group = module.sg.eks-sfn-sg
 }
 

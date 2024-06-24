@@ -29,14 +29,9 @@ resource "aws_iam_role_policy_attachment" "example-AmazonEKSVPCResourceControlle
   role       = aws_iam_role.eks-role.name
 }
 
-resource "aws_iam_role" "role" {
-  name               = "eks-role"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
-}
-
 resource "aws_eks_cluster" "eks" {
   name     = "${var.vpc-id}-eks"
-  role_arn = aws_iam_role.role.arn
+  role_arn = aws_iam_role.eks-role.arn
 
   vpc_config {
     endpoint_private_access = false

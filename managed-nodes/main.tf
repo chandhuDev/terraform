@@ -36,11 +36,11 @@ resource "aws_eks_node_group" "example" {
   version         = var.eks-version
 
   capacity_type  = "ON_DEMAND"
-  instance_types = ["t2.medium"]
+  instance_types = ["t2.micro"]
   scaling_config {
     desired_size = 2
     max_size     = 5
-    min_size     = 1
+    min_size     = 2
   }
 
   update_config {
@@ -49,7 +49,7 @@ resource "aws_eks_node_group" "example" {
 
   tags = {
     "Name"                             = "nodes-${var.eks-name}"
-    "kubernetes.io/cluster/my-cluster" = "owned"
+    "kubernetes.io/cluster/${var.eks-name}" = "owned"
   }
 
   depends_on = [

@@ -4,7 +4,7 @@ resource "aws_subnet" "pr-subnet" {
   cidr_block = each.value
   availability_zone = each.key
   tags = {
-    Name = "pb-subnet-${var.vpc-name}-${each.key}"
+    Name = "pr-subnet-${var.vpc-name}-${each.key}"
   }
 }
 
@@ -15,6 +15,6 @@ resource "aws_subnet" "pb-subnet" {
     availability_zone = each.key
     map_public_ip_on_launch = true
   tags = {
-    Name = "pr-subnet-${var.vpc-name}-${each.key}"
+    Name = "pb-subnet-${var.vpc-name}-${each.key}"
   }
 }

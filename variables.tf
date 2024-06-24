@@ -46,3 +46,6 @@ variable "ec2-subnet" {
 variable "instance_image" {
   type = string
 }
+variable "eks-sf-node-name" {
+  type = string
+}

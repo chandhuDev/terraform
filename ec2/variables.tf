@@ -11,7 +11,7 @@ variable "az" {
   type = string
 }
 variable "public_subnet_ids" {
-  type = string
+  type = map(string)
 }
 variable "aws_key_pair_name" {
   type = string
