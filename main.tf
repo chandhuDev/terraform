@@ -73,7 +73,7 @@ module "eks" {
 
 module "managed-nodes" {
   source      = "./managed-nodes"
-  nodeName    = "${var.eks-node-name}"
+  nodeName    = var.eks-node-name
   eks-name    = module.eks.eks-name
   subnet_ids  = module.subnets.subnet_ids_pr
   region      = var.region
@@ -84,7 +84,7 @@ module "self-managed-nodes" {
   source                 = "./self-managed-nodes"
   smn-instance-type      = var.intance_type
   smn-node-image         = var.instance_image
-  nodeName    = var.eks-sf-node-name
+  nodeName               = var.eks-sf-node-name
   subnet_ids             = module.subnets.subnet_ids_pr
   eks_cluster_name       = module.eks.eks-name
   eks-smn-security-group = module.sg.eks-sfn-sg
