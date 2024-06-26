@@ -1,5 +1,8 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current_user" {}
 
+resource "aws_iam_user" "stag-dev-user" {
+  name = "stag-dev-user"
+}
 resource "aws_iam_role" "dev-role" {
   name               = "staging-role"
   assume_role_policy = <<POLICY
@@ -10,7 +13,7 @@ resource "aws_iam_role" "dev-role" {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${var.dev-role}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current_user.account_id}:user/${aws_iam_user.stag-dev-user.name}"
       }
     }
   ]
@@ -48,13 +51,10 @@ POLICY
 
 resource "aws_iam_role_policy_attachment" "dev-role-attachment" {
   policy_arn = aws_iam_policy.dev-role-policy.arn
-  role = aws_iam_role.dev-role.arn
+  role = aws_iam_role.dev-role.name
 }
 
 
-resource "aws_iam_user" "stag-dev-user" {
-  name = "stag-dev-user"
-}
 
 resource "aws_iam_policy" "stag-dev-user-policy" {
   name = "AmazonEKSDevPolicy"
@@ -76,7 +76,7 @@ POLICY
 }
 
 resource "aws_iam_user_policy_attachment" "stag-dev-role-attachment" {
-  user = aws_iam_user.prod-test-user.arn
+  user = aws_iam_user.prod-test-user.name
   policy_arn = aws_iam_policy.test-role-policy.arn
 }
 

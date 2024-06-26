@@ -90,3 +90,8 @@ module "self-managed-nodes" {
   eks-smn-security-group = module.sg.eks-sfn-sg
 }
 
+module "roles" {
+  source = "./roles"
+  eks-name = module.eks.eks-name
+}
+
