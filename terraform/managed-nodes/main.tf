@@ -36,11 +36,11 @@ resource "aws_eks_node_group" "example" {
   version         = var.eks-version
 
   capacity_type  = "ON_DEMAND"
-  instance_types = ["t2.micro"]
+  instance_types = ["t3.large"]
   scaling_config {
-    desired_size = 2
-    max_size     = 5
-    min_size     = 2
+    desired_size = 6
+    max_size     = 10
+    min_size     = 5
   }
 
   update_config {

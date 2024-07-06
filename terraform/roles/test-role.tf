@@ -1,10 +1,12 @@
-data "aws_caller_identity" "current_user" {}
+data "aws_caller_identity" "current_aws_user" {}
 
-resource "aws_iam_user" "stag-dev-user" {
-  name = "stag-dev-user"
+resource "aws_iam_user" "prod-test-user" {
+  name = "prod-test-user"
 }
-resource "aws_iam_role" "dev-role" {
-  name               = "staging-role"
+
+resource "aws_iam_role" "test-role" {
+  name = "prod-role"
+
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -13,7 +15,7 @@ resource "aws_iam_role" "dev-role" {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current_user.account_id}:user/${aws_iam_user.stag-dev-user.name}"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current_aws_user.account_id}:user/${aws_iam_user.prod-test-user.name}"
       }
     }
   ]
@@ -21,8 +23,8 @@ resource "aws_iam_role" "dev-role" {
 POLICY
 }
 
-resource "aws_iam_policy" "dev-role-policy" {
-  name   = "staging-role-policy"
+resource "aws_iam_policy" "test-role-policy" {
+  name   = "prod-role-policy"
   policy = <<POLICY
 {
     "Version": "2012-10-17",
@@ -49,16 +51,13 @@ resource "aws_iam_policy" "dev-role-policy" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "dev-role-attachment" {
-  policy_arn = aws_iam_policy.dev-role-policy.arn
-  role = aws_iam_role.dev-role.name
+resource "aws_iam_role_policy_attachment" "test-role-attachment" {
+  policy_arn = aws_iam_policy.test-role-policy.arn
+  role       = aws_iam_role.test-role.name
 }
 
-
-
-resource "aws_iam_policy" "stag-dev-user-policy" {
-  name = "AmazonEKSDevPolicy"
-
+resource "aws_iam_policy" "prod-test-user-policy" {
+  name = "AmazonEKSTestPolicy"
   policy = <<POLICY
 {
     "Version": "2012-10-17",
@@ -68,20 +67,20 @@ resource "aws_iam_policy" "stag-dev-user-policy" {
             "Action": [
                 "sts:AssumeRole"
             ],
-            "Resource": "${aws_iam_role.dev-role.arn}"
+            "Resource": "${aws_iam_role.test-role.arn}"
         }
     ]
 }
 POLICY
 }
 
-resource "aws_iam_user_policy_attachment" "stag-dev-role-attachment" {
-  user = aws_iam_user.prod-test-user.name
-  policy_arn = aws_iam_policy.test-role-policy.arn
+resource "aws_iam_user_policy_attachment" "prod-test-user-attachment" {
+  user       = aws_iam_user.prod-test-user.name
+  policy_arn = aws_iam_policy.prod-test-user-policy.arn
 }
 
-resource "aws_eks_access_entry" "stag-dev-acess-entry" {
+resource "aws_eks_access_entry" "prod-test-access-entry" {
   cluster_name      = var.eks-name
   principal_arn     = aws_iam_role.test-role.arn
-  kubernetes_groups = ["devGroup"]
+  kubernetes_groups = ["testGroup"]
 }

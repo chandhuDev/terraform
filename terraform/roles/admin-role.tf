@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "admin-role" {
-  name               = "staging-role"
+  name               = "admin-role"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -48,7 +48,7 @@ POLICY
 
 resource "aws_iam_role_policy_attachment" "admin-role-attachment" {
   policy_arn = aws_iam_policy.admin-role-policy.arn
-  role = aws_iam_role.admin-role.arn
+  role = aws_iam_role.admin-role.name
 }
 
 
@@ -76,7 +76,7 @@ POLICY
 }
 
 resource "aws_iam_user_policy_attachment" "admin-role-attachment" {
-  user = aws_iam_user.admin-user.arn
+  user = aws_iam_user.admin-user.name
   policy_arn = aws_iam_policy.admin-role-policy.arn
 }
 
