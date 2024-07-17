@@ -72,9 +72,9 @@ module "ec2" {
 }
 
 module "eks" {
-  source             = "./eks"
-  vpc-id             = module.vpc.vpc_id
-  private_subnet_ids = module.subnets.subnet_ids_pr
+    source             = "./eks"
+    vpc-id             = module.vpc.vpc_id
+    private_subnet_ids = module.subnets.subnet_ids_pr
 }
 
 module "managed-nodes" {
