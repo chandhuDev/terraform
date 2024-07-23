@@ -32,8 +32,9 @@ resource "aws_iam_policy" "test-role-policy" {
         {
             "Effect": "Allow",
             "Action": [
-                "eks:*"
-            ],
+                "eks:DescribeCluster",
+                "eks:ListCluster"            
+              ],
             "Resource": "*"
         },
         {

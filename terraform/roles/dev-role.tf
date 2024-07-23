@@ -30,8 +30,9 @@ resource "aws_iam_policy" "dev-role-policy" {
         {
             "Effect": "Allow",
             "Action": [
-                "eks:*"
-            ],
+                "eks:DescribeCluster",
+                "eks:ListCluster"            
+              ],
             "Resource": "*"
         },
         {

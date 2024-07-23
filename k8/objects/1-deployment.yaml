@@ -19,7 +19,7 @@ spec:
         image: aputra/myapp-193:v6
         ports:
         - name: my-container-1
-          containerPort: 8080
+          containerPort: 8000
 
 ---
 apiVersion: v1
@@ -31,7 +31,6 @@ spec:
     app: web-app
   ports:
     - protocol: TCP
-      port: 8080
+      port: 8000
       targetPort: my-container-1
-      nodePort: 30001
   type: NodePort
