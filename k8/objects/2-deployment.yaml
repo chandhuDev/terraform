@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-deploy
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend-container
+        image: kunchalavikram/sampleflask:v1
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-normal
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: frontend-container
+      protocol: TCP
+  selector:
+    app: frontend
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: frontend-headless
+spec:
+  ports:
+    - name: headless-http
+      port: 80
+      targetPort: frontend-container
+  selector:
+    app: frontend
+  clusterIP: None
+  
